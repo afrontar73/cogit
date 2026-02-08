@@ -1,0 +1,26 @@
+# cogit.yaml — Configuration for Cogit checks
+# All thresholds and rules in one place.
+
+# Paths that require quorum (multiple signatures) to modify
+protected_paths:
+  - "state/STATE.json"
+  - "state/STATE.schema.json"
+  - "cogit.yaml"
+
+# Minimum distinct signers required for protected path changes
+quorum_min: 2
+
+# Signature format expected in PR body:
+# SIGNED: <node_id> | <timestamp> | <role> | <confidence>
+# Example:
+# SIGNED: alice | 2026-02-08T14:00:00Z | author | 0.9
+# SIGNED: bob-gpt4 | 2026-02-08T14:05:00Z | reviewer | 0.85
+
+# PR size limits (WARNING, not BLOCK)
+max_files_changed: 10
+max_lines_changed: 500
+
+# Synced doc output
+sync_output: "docs/state.md"
+sync_source: "state/STATE.json"
+
