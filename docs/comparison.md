@@ -43,3 +43,26 @@ You can coordinate models with just Git and good conventions. Many teams already
 Cogit formalizes this pattern. Instead of hoping everyone follows the conventions, CI enforces them. Instead of Markdown files that drift, a JSON schema validates the state. Instead of trusting that someone reviewed a change, quorum signatures prove it.
 
 **Cogit is what you'd build if you took "just use Git" seriously and added the minimum automation to make it reliable.**
+
+## Related / Alternatives
+
+These tools solve adjacent problems. Cogit can complement or replace parts of them depending on your needs.
+
+### GitHub Branch Protection + CODEOWNERS (native)
+
+GitHub's built-in tooling: require N approvals, restrict who can push to branches, assign review by path via CODEOWNERS. This is the right starting point for most teams. Cogit adds what native protection doesn't do: schema-validated canonical state, decision rationale enforcement (why + rejected alternatives), and signature-based quorum from any node type (human, bot, model) — not just GitHub users with review permissions.
+
+- [Branch protection rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-a-branch-protection-rule/about-branch-protection-rules)
+- [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)
+
+### Palantir policy-bot
+
+Approval policies as code for GitHub PRs. Configurable rules for who must approve based on file paths, with YAML config. Closer to Cogit's quorum concept, but focused on GitHub user approvals rather than arbitrary node signatures. No state validation or sync.
+
+- [policy-bot](https://github.com/palantir/policy-bot)
+
+### Gov4Git (Microsoft Research)
+
+Governance as a programmable state machine embedded in Git. Cryptographic verification, quadratic voting, community currency. Designed for human open-source communities, not AI model coordination. See the main comparison section above for details.
+
+- [Gov4Git](https://github.com/gov4git/gov4git)
