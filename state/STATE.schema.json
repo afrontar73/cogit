@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cogit State v1",
+  "description": "Canonical state for multi-model orchestration over Git.",
+  "type": "object",
+  "required": ["version", "updated_at", "updated_by", "decisions", "risks", "limits"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the state document"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "updated_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Node ID of the last updater"
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "why", "rejected", "by", "timestamp"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^DEC-\\d+$" },
+          "title": { "type": "string", "minLength": 1 },
+          "why": { "type": "string", "minLength": 5 },
+          "rejected": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "by": { "type": "string", "minLength": 1 },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "limits": {
+      "type": "object",
+      "required": ["quorum_canon_min"],
+      "properties": {
+        "quorum_canon_min": {
+          "type": "integer",
+          "minimum": 2,
+          "description": "Minimum distinct signers for protected path changes"
+        }
+      }
+    }
+  }
+}
