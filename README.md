@@ -167,3 +167,4 @@ MIT — do whatever you want with it.
 ## Contributing
 
 Open an issue or PR. The only rule: every decision needs a *why* and a rejected alternative. Including yours.
+
