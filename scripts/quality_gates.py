@@ -162,7 +162,8 @@ def main():
     warnings = []
 
     ref = os.environ.get("GITHUB_REF", "")
-    base = "HEAD~1" if ref == "refs/heads/main" else "origin/main"
+    base_ref = os.environ.get("GITHUB_BASE_REF", "main")
+    base = "HEAD~1" if ref == "refs/heads/main" else f"origin/{base_ref}"
 
     diff_files = git(f"git diff --name-only {base}").splitlines()
     diff_files = [f for f in diff_files if f]
