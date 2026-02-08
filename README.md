@@ -1,59 +1,45 @@
 # Cogit
 
-**Multi-model orchestration over Git + CI. State canon, quorum checks, zero platform.**
-
-*Not a runtime: Cogit does not run agents or call LLM APIs. It only governs changes via PR + CI.*
+**PR gatekeeper for repos with shared state. Schema validation + synced docs + quorum on protected changes, over Git + CI.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Sponsor](https://img.shields.io/badge/Sponsor-♥-pink.svg)](SUPPORT.md)
 
-> Cogit is free and open source (MIT). Use it for anything.
-> If it saves you or your team time, consider [sponsoring the project](SUPPORT.md).
-> Need help setting it up? [Paid support is available](SUPPORT.md#paid-support).
+Cogit is a set of GitHub Actions checks that block PRs unless: the canonical JSON state passes schema validation, docs are in sync, and protected paths have enough signatures. That's it.
+
+### What it is / What it isn't
+
+- **Is:** A CI gatekeeper — validates state, enforces quorum, syncs docs. Runs in GitHub Actions (or any CI).
+- **Is:** A way to track *who changed what, when, and why* — through Git history and PR signatures.
+- **Isn't:** A runtime. Cogit does not run agents, call LLM APIs, or execute models.
+- **Isn't:** A platform. No accounts, no dashboard, no infra. Just Python scripts + a workflow file.
+
+> Free and open source (MIT). If it saves you time, consider [sponsoring](SUPPORT.md). Need help setting it up? [Paid support available](SUPPORT.md#paid-support).
 
 ---
 
-## The Problem
+## Demo (5 minutes)
 
-- You use multiple AI models (GPT, Claude, Gemini, open-source) but they can't share context or coordinate.
-- Orchestration platforms can be expensive and often introduce extra infrastructure and vendor lock-in.
-- There's no audit trail of who decided what, when, or why.
-
-## The Solution
-
-Cogit turns Git into a coordination layer for AI models. No platform, no runtime, no API keys.
-
-- **Canonical state in JSON** — validated by schema, diffable by Git, readable by any model.
-- **CI as arbiter** — automated checks enforce quorum, validate decisions, block bad changes.
-- **Typically $0** — runs on GitHub Actions free tier (public repos) or any CI. No dependencies beyond Python + Git.
-
-```
-PR with changes ──→ CI validates schema ──→ Quorum check (2+ signatures) ──→ Merge ──→ Synced docs
-```
-
-## Quickstart (5 minutes)
+PR without signatures → **fails**. Add 2 signatures → **passes**. That's the whole pitch.
 
 ```bash
-# 1. Fork and clone
+# 1. Fork, clone, install
 git clone https://github.com/YOUR_USER/cogit.git
 cd cogit
-
-# 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Verify it works
+# 2. Verify gates pass on the current state
 python scripts/quality_gates.py
 # → ✓ QUALITY GATES PASSED
 ```
 
-Now make a change:
+Make a change:
 
 ```bash
-# 4. Create a branch
 git checkout -b my-first-decision
 ```
 
-Add this decision to the `decisions` array in `state/STATE.json`:
+Add this to the `decisions` array in `state/STATE.json`:
 
 ```json
 {
@@ -69,22 +55,31 @@ Add this decision to the `decisions` array in `state/STATE.json`:
 Update `updated_at` and `updated_by` in the root of the JSON, then:
 
 ```bash
-# 5. Sync docs and validate locally
+# Sync docs and validate locally
 python scripts/sync_state.py         # Regenerates docs/state.md
 python scripts/quality_gates.py      # Runs all checks locally
 
-# 6. Commit and push
+# Commit and push
 git add .
 git commit -m "Add decision DEC-003"
 git push origin my-first-decision
-
-# 7. Open a PR with signatures in the body:
-#
-#   SIGNED: your-name | 2026-02-08T15:00:00Z | author | 0.9
-#   SIGNED: reviewer | 2026-02-08T15:05:00Z | reviewer | 0.85
-#
-# 8. Watch CI pass ✓
 ```
+
+Open a PR **without signatures** → CI blocks it:
+
+```
+✗ BLOCK: Protected path(s) modified: state/STATE.json.
+  Quorum requires 2 distinct signatures, found 0.
+```
+
+Edit the PR body, add two signatures:
+
+```
+SIGNED: your-name | 2026-02-08T15:00:00Z | author | 0.9
+SIGNED: reviewer | 2026-02-08T15:05:00Z | reviewer | 0.85
+```
+
+CI re-runs → **passes**. See [`examples/pr-demo/`](examples/pr-demo/) for the full walkthrough.
 
 ## How It Works
 
