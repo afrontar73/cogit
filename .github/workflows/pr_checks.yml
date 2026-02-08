@@ -1,0 +1,29 @@
+name: Cogit Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install jsonschema pyyaml
+
+      - name: Sync state docs
+        run: python scripts/sync_state.py
+
+      - name: Quality Gates
+        run: python scripts/quality_gates.py
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
