@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-02-08T12:00:00Z",
+  "updated_by": "alice",
+  "decisions": [
+    {
+      "id": "DEC-001",
+      "title": "Adopt JSON state as single source of truth",
+      "why": "JSON is validatable by CI, diffable by Git, and readable by any model or tool. Markdown is ambiguous.",
+      "rejected": [
+        "Markdown-only state (not machine-validatable)",
+        "Database (adds infrastructure dependency)"
+      ],
+      "by": "alice",
+      "timestamp": "2026-02-08T10:00:00Z"
+    },
+    {
+      "id": "DEC-002",
+      "title": "Require quorum for canonical state changes",
+      "why": "Prevents any single node (human or model) from unilaterally changing the rules. Two distinct signers catch errors and bias.",
+      "rejected": [
+        "No protection (any commit can change state)",
+        "Full consensus (blocks progress if one node is offline)"
+      ],
+      "by": "bob-gpt4",
+      "timestamp": "2026-02-08T11:00:00Z"
+    }
+  ],
+  "risks": [
+    "Echo chamber: models validating each other without external calibration",
+    "Config drift: cogit.yaml and STATE.json diverge on quorum settings"
+  ],
+  "limits": {
+    "quorum_canon_min": 2
+  }
+}
