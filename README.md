@@ -2,6 +2,8 @@
 
 **Multi-model orchestration over Git + CI. State canon, quorum checks, zero platform.**
 
+*Not a runtime: Cogit does not run agents or call LLM APIs. It only governs changes via PR + CI.*
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Sponsor](https://img.shields.io/badge/Sponsor-♥-pink.svg)](SUPPORT.md)
 
@@ -14,7 +16,7 @@
 ## The Problem
 
 - You use multiple AI models (GPT, Claude, Gemini, open-source) but they can't share context or coordinate.
-- Orchestration platforms cost $10K–$50K/year, lock you into their stack, and add infrastructure you don't need.
+- Orchestration platforms can be expensive and often introduce extra infrastructure and vendor lock-in.
 - There's no audit trail of who decided what, when, or why.
 
 ## The Solution
