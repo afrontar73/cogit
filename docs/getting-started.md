@@ -15,7 +15,7 @@ Fork [cogit](https://github.com/YOUR_USER/cogit) on GitHub, then:
 ```bash
 git clone https://github.com/YOUR_USER/cogit.git
 cd cogit
-pip install jsonschema pyyaml
+pip install -r requirements.txt
 ```
 
 ### 2. Verify it works
