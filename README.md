@@ -15,7 +15,7 @@
 
 - You use multiple AI models (GPT, Claude, Gemini, open-source) but they can't share context or coordinate.
 - Orchestration platforms cost $10K–$50K/year, lock you into their stack, and add infrastructure you don't need.
-- There's no audit trail. No one knows which model decided what, when, or why.
+- There's no audit trail of who decided what, when, or why.
 
 ## The Solution
 
@@ -23,7 +23,7 @@ Cogit turns Git into a coordination layer for AI models. No platform, no runtime
 
 - **Canonical state in JSON** — validated by schema, diffable by Git, readable by any model.
 - **CI as arbiter** — automated checks enforce quorum, validate decisions, block bad changes.
-- **Zero cost** — runs on GitHub Actions (free for public repos) or any CI. No dependencies beyond Python + Git.
+- **Typically $0** — runs on GitHub Actions free tier (public repos) or any CI. No dependencies beyond Python + Git.
 
 ```
 PR with changes ──→ CI validates schema ──→ Quorum check (2+ signatures) ──→ Merge ──→ Synced docs
@@ -36,27 +36,52 @@ PR with changes ──→ CI validates schema ──→ Quorum check (2+ signatu
 git clone https://github.com/YOUR_USER/cogit.git
 cd cogit
 
-# 2. Create a branch
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Verify it works
+python scripts/quality_gates.py
+# → ✓ QUALITY GATES PASSED
+```
+
+Now make a change:
+
+```bash
+# 4. Create a branch
 git checkout -b my-first-decision
+```
 
-# 3. Edit state/STATE.json — add a decision
-# (see examples/pr-demo/ for a ready-made example)
+Add this decision to the `decisions` array in `state/STATE.json`:
 
-# 4. Sync docs
-pip install jsonschema pyyaml
-python scripts/sync_state.py
+```json
+{
+  "id": "DEC-003",
+  "title": "Use English for all state entries",
+  "why": "Ensures all nodes can read and contribute regardless of native language.",
+  "rejected": ["Allow any language (creates comprehension barriers between nodes)"],
+  "by": "your-name",
+  "timestamp": "2026-02-08T15:00:00Z"
+}
+```
 
-# 5. Commit and push
+Update `updated_at` and `updated_by` in the root of the JSON, then:
+
+```bash
+# 5. Sync docs and validate locally
+python scripts/sync_state.py         # Regenerates docs/state.md
+python scripts/quality_gates.py      # Runs all checks locally
+
+# 6. Commit and push
 git add .
 git commit -m "Add decision DEC-003"
 git push origin my-first-decision
 
-# 6. Open a PR with signatures in the body:
+# 7. Open a PR with signatures in the body:
 #
-#   SIGNED: alice | 2026-02-08T14:00:00Z | author | 0.9
-#   SIGNED: bob-gpt4 | 2026-02-08T14:05:00Z | reviewer | 0.85
+#   SIGNED: your-name | 2026-02-08T15:00:00Z | author | 0.9
+#   SIGNED: reviewer | 2026-02-08T15:05:00Z | reviewer | 0.85
 #
-# 7. Watch CI pass ✓
+# 8. Watch CI pass ✓
 ```
 
 ## How It Works
@@ -81,8 +106,8 @@ These are **execution engines** — they run models in real-time, manage prompts
 |---|---|---|
 | **What it does** | Governs decisions, tracks state, enforces rules | Executes model calls, chains tasks |
 | **Infrastructure** | Git + CI (you already have it) | Python runtime + API keys + platform |
-| **Cost** | $0 | Free–$$$ |
-| **Audit trail** | Git history + signed PRs (immutable) | Logs (if configured) |
+| **Cost** | Typically $0 | Free–$$$ |
+| **Audit trail** | Git history + signed PRs | Logs (if configured) |
 | **Model agnostic** | Any model, any provider, any interface | Usually tied to specific SDKs |
 | **Works offline** | Yes (async, via PRs) | No (needs live API access) |
 
