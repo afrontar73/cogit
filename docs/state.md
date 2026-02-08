@@ -1,5 +1,5 @@
 # State — Auto-generated from state/STATE.json
-<!-- version: 1.0.0 | updated: 2026-02-08T12:00:00Z | by: alice -->
+<!-- version: 1.0.0 | updated: 2026-02-08T18:00:00Z | by: afrontar73 -->
 <!-- DO NOT EDIT. Run: python scripts/sync_state.py -->
 
 ## Decisions
@@ -13,6 +13,11 @@
 - **Why:** Prevents any single node (human or model) from unilaterally changing the rules. Two distinct signers catch errors and bias.
 - **Rejected:** No protection (any commit can change state); Full consensus (blocks progress if one node is offline)
 - **By:** bob-gpt4 (2026-02-08T11:00:00Z)
+
+### DEC-003: Use English for all state entries
+- **Why:** Ensures all nodes can read and contribute regardless of native language.
+- **Rejected:** Allow any language (creates comprehension barriers between nodes)
+- **By:** afrontar73 (2026-02-08T18:00:00Z)
 
 ## Risks
 
