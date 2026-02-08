@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-02-08T12:00:00Z",
-  "updated_by": "alice",
+  "updated_at": "2026-02-08T18:00:00Z",
+  "updated_by": "afrontar73",
   "decisions": [
     {
       "id": "DEC-001",
@@ -24,6 +24,16 @@
       ],
       "by": "bob-gpt4",
       "timestamp": "2026-02-08T11:00:00Z"
+    },
+    {
+      "id": "DEC-003",
+      "title": "Use English for all state entries",
+      "why": "Ensures all nodes can read and contribute regardless of native language.",
+      "rejected": [
+        "Allow any language (creates comprehension barriers between nodes)"
+      ],
+      "by": "afrontar73",
+      "timestamp": "2026-02-08T18:00:00Z"
     }
   ],
   "risks": [
