@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Sponsor](https://img.shields.io/badge/Sponsor-♥-pink.svg)](SUPPORT.md)
 
-Cogit is a set of GitHub Actions checks that block PRs unless: the canonical JSON state passes schema validation, docs are in sync, and protected paths have enough signatures. That's it.
+Cogit is a PR gatekeeper for GitHub Actions. It enforces quorum signatures on protected changes, validates canonical state against JSON Schema, and keeps docs in sync — policy as code, over Git + CI. No runtime, no platform, no API keys.
 
 ### What it is / What it isn't
 
